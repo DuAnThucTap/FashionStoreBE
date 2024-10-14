@@ -35,7 +35,6 @@ public class Product {
 
     @Column(columnDefinition = "TEXT")
     private String description;
-
     private String size;
     private String color;
     private String image;
