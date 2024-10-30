@@ -8,7 +8,7 @@ import com.fashionstore.request.ProductDTO;
 import com.fashionstore.respone.ProductResponeDTO;
 
 @Component
-public class FoodMapper {
+public class ProductMapper {
     public Product toProductDTO(ProductDTO requestDTO) {
         Product dto = new Product();
         BeanUtils.copyProperties(requestDTO, dto);

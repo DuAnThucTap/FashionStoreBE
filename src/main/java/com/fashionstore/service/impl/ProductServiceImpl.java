@@ -2,7 +2,7 @@ package com.fashionstore.service.impl;
 
 import com.fashionstore.entity.Category;
 import com.fashionstore.entity.Product;
-import com.fashionstore.map.FoodMapper;
+import com.fashionstore.map.ProductMapper;
 import com.fashionstore.repository.CategoryRepository;
 import com.fashionstore.repository.ProductRepository;
 import com.fashionstore.request.ProductDTO;
@@ -24,14 +24,14 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private FileService fileService;
     @Autowired
-    private FoodMapper foodMapper;
+    private ProductMapper productMapper;
 
     @Autowired
     private CategoryRepository categoryRepository;
     @Override
     public Page<ProductResponeDTO> getAllProduct(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return productRepository.findAll(pageable).map(foodMapper::toProductResponeDTO);
+        return productRepository.findAll(pageable).map(productMapper::toProductResponeDTO);
     }
     @Transactional
 	@Override
@@ -42,14 +42,14 @@ public class ProductServiceImpl implements ProductService {
         if (product != null) {
             throw new RuntimeException("PRODUCT_ALREADY_EXISTS");
         }
-        product = foodMapper.toProductDTO(requestDTO);
+        product = productMapper.toProductDTO(requestDTO);
         if (file != null) {
             product.setImage(file.getOriginalFilename());
             fileService.saveFile(file);
         }
         product.setCategory(categoryProduct);
 
-        return foodMapper.toProductResponeDTO(productRepository.save(product));
+        return productMapper.toProductResponeDTO(productRepository.save(product));
 		
 	}
     @Transactional
@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
                  .orElseThrow(() -> new RuntimeException("FOOD_NOT_EXISTS"));
          String imgProductTemp = product.getImage();
 
-         product = foodMapper.toProductDTO(requestDTO);
+         product = productMapper.toProductDTO(requestDTO);
 
          if (file != null && !file.getOriginalFilename().trim().equals("")) {
              imgProductTemp = file.getOriginalFilename();
@@ -72,14 +72,20 @@ public class ProductServiceImpl implements ProductService {
          product.setImage(imgProductTemp);
          productRepository.save(product);
 
-         return foodMapper.toProductResponeDTO(product);
+         return productMapper.toProductResponeDTO(product);
 	}
 	@Override
 	public ProductResponeDTO getProductById(Long productId) {
 		Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException(" PRODUCT_NOT_EXISTS"));
-        ProductResponeDTO responeDTO = foodMapper.toProductResponeDTO(product);
+        ProductResponeDTO responeDTO = productMapper.toProductResponeDTO(product);
         responeDTO.setCategoryId(product.getCategory().getCategoryId());
         return responeDTO;
 	}
+//	@Override
+//	public Page<ProductResponeDTO> searchProduct(int page, int size,String name) {
+//		 Pageable pageable = PageRequest.of(page, size);
+//	        return productRepository.findNameAllProduct(pageable,name).map(productMapper::toProductResponeDTO);
+//	}
+
 
 }

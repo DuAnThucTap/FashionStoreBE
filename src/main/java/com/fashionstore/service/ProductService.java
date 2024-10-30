@@ -11,4 +11,5 @@ public interface ProductService {
 	 public ProductResponeDTO saveProduct(ProductDTO requestDTO, MultipartFile file);
 	 public ProductResponeDTO updateProduct(Long productId,ProductDTO requestDTO, MultipartFile file);
 	 public ProductResponeDTO getProductById(Long productId);
+//	 public Page<ProductResponeDTO> searchProduct(int page, int size ,String name);
 }
