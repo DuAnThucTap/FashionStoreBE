@@ -14,7 +14,7 @@ public class ProductDTO {
     private String nameProduct;
     @NotNull(message = "Price_not_null")
     @Min(value = 0, message = "Price_food_not_negative")
-    private Double price;
+    private Long price;
     private String publicationDate;
     private String description;
     @NotBlank(message = "size_food_not_blank")

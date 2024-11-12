@@ -1,5 +1,6 @@
 package com.fashionstore.service.impl;
 
+import com.fashionstore.Specification.ProductSpecs;
 import com.fashionstore.entity.Category;
 import com.fashionstore.entity.Product;
 import com.fashionstore.map.ProductMapper;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,11 +83,17 @@ public class ProductServiceImpl implements ProductService {
         responeDTO.setCategoryId(product.getCategory().getCategoryId());
         return responeDTO;
 	}
-//	@Override
-//	public Page<ProductResponeDTO> searchProduct(int page, int size,String name) {
-//		 Pageable pageable = PageRequest.of(page, size);
-//	        return productRepository.findNameAllProduct(pageable,name).map(productMapper::toProductResponeDTO);
-//	}
+	@Override
+	public Page<ProductResponeDTO> getProductFromFilter(String nameProduct, String idCategory, String isGender,String price, Pageable pageable) {
+
+		Specification<Product> specsProduct = Specification.where(
+				ProductSpecs.hasNameProduct(nameProduct)
+				.and(ProductSpecs.hasIdCategory(idCategory))
+				.and(ProductSpecs.isGender(isGender)))
+				.and(ProductSpecs.hasPrice(price));
+		return	productRepository.findAll(specsProduct, pageable).map(productMapper::toProductResponeDTO);
+
+	}
 
 
 }

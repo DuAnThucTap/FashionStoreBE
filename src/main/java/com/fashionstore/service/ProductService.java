@@ -1,6 +1,7 @@
 package com.fashionstore.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fashionstore.request.ProductDTO;
@@ -11,5 +12,6 @@ public interface ProductService {
 	 public ProductResponeDTO saveProduct(ProductDTO requestDTO, MultipartFile file);
 	 public ProductResponeDTO updateProduct(Long productId,ProductDTO requestDTO, MultipartFile file);
 	 public ProductResponeDTO getProductById(Long productId);
-//	 public Page<ProductResponeDTO> searchProduct(int page, int size ,String name);
+	Page<ProductResponeDTO> getProductFromFilter(String nameProduct, String idCategory, String isGender, String price,
+			Pageable pageable);
 }

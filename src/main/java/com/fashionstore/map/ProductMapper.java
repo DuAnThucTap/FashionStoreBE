@@ -1,22 +1,12 @@
 package com.fashionstore.map;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
-
 import com.fashionstore.entity.Product;
 import com.fashionstore.request.ProductDTO;
 import com.fashionstore.respone.ProductResponeDTO;
+import org.mapstruct.Mapper;
 
-@Component
-public class ProductMapper {
-    public Product toProductDTO(ProductDTO requestDTO) {
-        Product dto = new Product();
-        BeanUtils.copyProperties(requestDTO, dto);
-        return dto;
-    }
-    public ProductResponeDTO toProductResponeDTO(Product product) {
-        ProductResponeDTO dto = new ProductResponeDTO();
-        BeanUtils.copyProperties(product, dto);
-        return dto;
-    }
+@Mapper(componentModel = "spring")
+public interface ProductMapper{
+     Product toProductDTO(ProductDTO requestDTO);
+     ProductResponeDTO toProductResponeDTO(Product product) ;
 }

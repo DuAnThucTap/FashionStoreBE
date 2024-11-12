@@ -15,12 +15,11 @@ import java.util.List;
 @Setter
 @Entity
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
     private String nameProduct;
-    private BigDecimal price;
+    private Long price;
 
     @Temporal(TemporalType.DATE)
     private Date publicationDate;
@@ -31,14 +30,14 @@ public class Product {
     private String image;
     private int stock;
     private boolean isDelete;
-
+    private String size;
+    private String color;
+    private boolean gender;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "product_detail_id")
-    private ProductDetail productDetail;
+
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;

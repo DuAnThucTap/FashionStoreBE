@@ -1,6 +1,8 @@
 package com.fashionstore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,9 +58,22 @@ public class ProductController {
 	                .result(productService.updateProduct(productId,requestDTO,file))
 	                .build();
 	    }
-	
 		@DeleteMapping("/{id}")
 		public void deleteUser(@PathVariable Long id) {
 			productRepository.deleteById(id);
 		}
+		 @GetMapping("filter")
+		    public ApiRespone<?>getUserFromFilter(@RequestParam(required = false) String  nameProduct,
+		    		@RequestParam(required = false) String Category,
+		    		@RequestParam(required = false) String Price,
+		    		@RequestParam(required = false) String isGender,
+		    		@RequestParam(value = "page", defaultValue = "0") int page,
+		    	    @RequestParam(value = "size", defaultValue = "10") int size){
+		        System.out.println(page);
+		        System.out.println(size);
+		    	Pageable pageable = PageRequest.of(page, size);
+		    	  return ApiRespone.builder()
+		                  .result(productService.getProductFromFilter(nameProduct,Category,isGender,Price,pageable))
+		                  .build();
+		    }
 }

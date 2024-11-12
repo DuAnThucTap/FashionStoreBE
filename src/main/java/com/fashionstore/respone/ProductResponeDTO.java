@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class ProductResponeDTO {
     private Long productId;
     private String nameProduct;
-    private Double price;
+    private Long price;
     private String publicationDate;
     private String description;
     private String size;
