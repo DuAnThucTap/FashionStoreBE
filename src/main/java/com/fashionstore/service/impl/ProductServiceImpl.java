@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductResponeDTO saveProduct(ProductDTO requestDTO, MultipartFile file) {
     	Product product = productRepository.findByNameProduct(requestDTO.getNameProduct().trim());
-        Category categoryProduct = categoryRepository.findById(requestDTO.getCategoryId())
+        Category categoryProduct = categoryRepository.findById(requestDTO.getIdCategory())
                 .orElseThrow(() -> new RuntimeException("Category_not_found"));
         if (product != null) {
             throw new RuntimeException("PRODUCT_ALREADY_EXISTS");
@@ -57,10 +57,10 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
 	@Override
 	public ProductResponeDTO updateProduct(Long productId, ProductDTO requestDTO, MultipartFile file) {
-    	 Category categoryProduct= categoryRepository.findById(requestDTO.getCategoryId())
+    	 Category categoryProduct= categoryRepository.findById(requestDTO.getIdCategory())
                  .orElseThrow(() -> new RuntimeException("Category_not_found"));
          Product product = productRepository.findById(productId)
-                 .orElseThrow(() -> new RuntimeException("FOOD_NOT_EXISTS"));
+                 .orElseThrow(() -> new RuntimeException("PRODUCT_NOT_EXISTS"));
          String imgProductTemp = product.getImage();
 
          product = productMapper.toProductDTO(requestDTO);
@@ -80,20 +80,22 @@ public class ProductServiceImpl implements ProductService {
 	public ProductResponeDTO getProductById(Long productId) {
 		Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException(" PRODUCT_NOT_EXISTS"));
         ProductResponeDTO responeDTO = productMapper.toProductResponeDTO(product);
-        responeDTO.setCategoryId(product.getCategory().getCategoryId());
+        responeDTO.setIdCategory(product.getCategory().getIdCategory());
         return responeDTO;
 	}
 	@Override
-	public Page<ProductResponeDTO> getProductFromFilter(String nameProduct, String idCategory, String isGender,String price, Pageable pageable) {
+	public Page<ProductResponeDTO> getProductFromFilter(
+	        String nameProduct, String idCategory, String price, String isGender, Pageable pageable) {
 
-		Specification<Product> specsProduct = Specification.where(
-				ProductSpecs.hasNameProduct(nameProduct)
-				.and(ProductSpecs.hasIdCategory(idCategory))
-				.and(ProductSpecs.isGender(isGender)))
-				.and(ProductSpecs.hasPrice(price));
-		return	productRepository.findAll(specsProduct, pageable).map(productMapper::toProductResponeDTO);
+	    Specification<Product> specsProduct = Specification.where(ProductSpecs.hasNameProduct(nameProduct))
+	            .and(ProductSpecs.hasIdCategory(idCategory))
+	            .and(ProductSpecs.hasPrice(price))
+	            .and(ProductSpecs.isGender(isGender));
 
+	    return productRepository.findAll(specsProduct, pageable)
+	            .map(productMapper::toProductResponeDTO);
 	}
+
 
 
 }

@@ -12,6 +12,7 @@ public interface ProductService {
 	 public ProductResponeDTO saveProduct(ProductDTO requestDTO, MultipartFile file);
 	 public ProductResponeDTO updateProduct(Long productId,ProductDTO requestDTO, MultipartFile file);
 	 public ProductResponeDTO getProductById(Long productId);
-	Page<ProductResponeDTO> getProductFromFilter(String nameProduct, String idCategory, String isGender, String price,
-			Pageable pageable);
+	 Page<ProductResponeDTO> getProductFromFilter(
+		        String nameProduct, String idCategory, String price, String isGender, Pageable pageable);
+
 }

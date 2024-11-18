@@ -24,7 +24,6 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/products")
-@CrossOrigin("http://localhost:4200")
 public class ProductController {
 	@Autowired
 	private ProductRepository productRepository;
@@ -58,22 +57,21 @@ public class ProductController {
 	                .result(productService.updateProduct(productId,requestDTO,file))
 	                .build();
 	    }
-		@DeleteMapping("/{id}")
-		public void deleteUser(@PathVariable Long id) {
-			productRepository.deleteById(id);
-		}
-		 @GetMapping("filter")
-		    public ApiRespone<?>getUserFromFilter(@RequestParam(required = false) String  nameProduct,
-		    		@RequestParam(required = false) String Category,
-		    		@RequestParam(required = false) String Price,
-		    		@RequestParam(required = false) String isGender,
-		    		@RequestParam(value = "page", defaultValue = "0") int page,
-		    	    @RequestParam(value = "size", defaultValue = "10") int size){
-		        System.out.println(page);
-		        System.out.println(size);
-		    	Pageable pageable = PageRequest.of(page, size);
-		    	  return ApiRespone.builder()
-		                  .result(productService.getProductFromFilter(nameProduct,Category,isGender,Price,pageable))
-		                  .build();
-		    }
+
+	    @GetMapping("filter")
+	    public ApiRespone<?> getProductFromFilter(
+	            @RequestParam(required = false) String nameProduct,
+	            @RequestParam(required = false) String idCategory,
+	            @RequestParam(required = false) String price,
+	            @RequestParam(required = false) String isGender,
+	            @RequestParam(value = "page", defaultValue = "0") int page,
+	            @RequestParam(value = "size", defaultValue = "10") int size) {
+	        
+	        Pageable pageable = PageRequest.of(page, size);
+
+	        return ApiRespone.builder()
+	                .result(productService.getProductFromFilter(nameProduct, idCategory, price, isGender, pageable))
+	                .build();
+	    }
+
 }
